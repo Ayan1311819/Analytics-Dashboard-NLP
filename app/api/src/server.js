@@ -6,7 +6,12 @@ import { PrismaClient } from "@prisma/client";
 dotenv.config();
 
 const app = express();
-app.use(cors());
+app.use(cors({
+  origin: [
+    "https://analytics-dashboard-nlp.vercel.app/",
+    "https://vanna-ai-epo1.onrender.com"
+  ],
+}));
 app.use(express.json());
 
 const prisma = new PrismaClient();
