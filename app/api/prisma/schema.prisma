@@ -1,0 +1,69 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model Vendor {
+  id         Int       @id @default(autoincrement())
+  name       String
+  taxId      String?
+  address    String?
+  externalId String?   @unique
+  invoices   Invoice[]
+}
+
+model Customer {
+  id         Int       @id @default(autoincrement())
+  name       String
+  address    String?
+  externalId String?   @unique
+  invoices   Invoice[]
+}
+
+model Invoice {
+  id           Int        @id @default(autoincrement())
+  invoiceCode  String?
+  invoiceDate  DateTime?
+  deliveryDate DateTime?
+  documentType String?
+  totalAmount  Float?
+  subTotal     Float?
+  totalTax     Float?
+  currency     String?
+  vendorId     Int?
+  customerId   Int?
+  customer     Customer?  @relation(fields: [customerId], references: [id])
+  vendor       Vendor?    @relation(fields: [vendorId], references: [id])
+  lineItems    LineItem[]
+  payments     Payment[]
+}
+
+model LineItem {
+  id           Int     @id @default(autoincrement())
+  invoiceId    Int
+  description  String?
+  quantity     Float?
+  unitPrice    Float?
+  totalPrice   Float?
+  sachkonto    String?
+  buschluessel String?
+  vatRate      Float?
+  vatAmount    Float?
+  invoice      Invoice @relation(fields: [invoiceId], references: [id])
+}
+
+model Payment {
+  id                 Int       @id @default(autoincrement())
+  invoiceId          Int
+  dueDate            DateTime?
+  bankAccountNumber  String?
+  discountedTotal    Float?
+  paymentTerms       String?
+  netDays            Int?
+  discountPercentage Float?
+  invoice            Invoice   @relation(fields: [invoiceId], references: [id])
+}
