@@ -8,7 +8,7 @@ dotenv.config();
 const app = express();
 app.use(cors({
   origin: [
-    "https://your-frontend.vercel.app",
+    "https://analytics-dashboard-nlp.vercel.app/",
     "https://vanna-ai-epo1.onrender.com"
   ],
 }));
