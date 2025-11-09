@@ -4,9 +4,8 @@
   "description": "",
   "main": "server.js",
   "scripts": {
-    "build": "tsc",
-    "start": "node dist/server.js",
-    "dev": "ts-node src/server.ts"
+    "start": "node src/server.js",
+    "dev": "nodemon src/server.ts"
   },
   "type": "module",
   "keywords": [],

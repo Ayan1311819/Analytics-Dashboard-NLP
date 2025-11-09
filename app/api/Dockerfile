@@ -4,27 +4,23 @@ WORKDIR /app
 # Copy package files
 COPY package*.json ./
 
-# Copy prisma schema
+# Copy Prisma schema
 COPY prisma ./prisma/
 
-# Install dependencies
-RUN npm ci
+# Install ALL dependencies (including Prisma)
+RUN npm install
 
-# Copy source code
+# Copy all source code
 COPY . .
 
-# Set build-time DATABASE_URL for Prisma generate
-ARG DATABASE_URL="postgresql://placeholder:placeholder@placeholder:5432/placeholder"
-ENV DATABASE_URL=$DATABASE_URL
+# Set DATABASE_URL for Prisma generate
+ENV DATABASE_URL="postgresql://placeholder:placeholder@placeholder:5432/placeholder"
 
 # Generate Prisma Client
 RUN npx prisma generate
 
-# Build TypeScript (this creates dist folder)
-RUN npm run build
-
 # Expose port
 EXPOSE 4000
 
-# Start the server - use the compiled JS from dist
-CMD ["node", "dist/server.js"]
+# Start server directly - NO BUILD NEEDED
+CMD ["node", "src/server.js"]
