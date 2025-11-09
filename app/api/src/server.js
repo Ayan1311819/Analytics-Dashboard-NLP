@@ -6,7 +6,12 @@ import { PrismaClient } from "@prisma/client";
 dotenv.config();
 
 const app = express();
-app.use(cors());
+app.use(cors({
+  origin: [
+    "https://your-frontend.vercel.app",
+    "https://vanna-ai-epo1.onrender.com"
+  ],
+}));
 app.use(express.json());
 
 const prisma = new PrismaClient();
@@ -205,12 +210,13 @@ app.get("/invoices", async (req, res) => {
   }
 });
 
+const VANNA_API_BASE_URL = process.env.VANNA_API_BASE_URL;
 app.post("/chat-with-data", async (req, res) => {
   try {
-    const resp = await fetch("http://127.0.0.1:8000/query", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ query: req.body.query })
+    const resp = await fetch(`${VANNA_API_BASE_URL}/query`, {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ query: req.body.query })
     });
     const data = await resp.json();
     res.json(data);
