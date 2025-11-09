@@ -1,9 +1,10 @@
 "use client";
 import { Search, Bell, User } from "lucide-react";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
-import { useState, useEffect } from "react";
+import { useState, useEffect, Suspense } from "react";
 
-export default function Header() {
+// Separate component that uses useSearchParams
+function HeaderContent() {
   const pathname = usePathname();
   const router = useRouter();
   const searchParams = useSearchParams();
@@ -74,5 +75,22 @@ export default function Header() {
         </div>
       </div>
     </header>
+  );
+}
+
+// Main component wrapped in Suspense
+export default function Header() {
+  return (
+    <Suspense fallback={
+      <header className="bg-white border-b border-gray-200 px-6 py-4">
+        <div className="flex items-center justify-between">
+          <div className="flex-1">
+            <div className="h-6 w-32 bg-gray-200 animate-pulse rounded"></div>
+          </div>
+        </div>
+      </header>
+    }>
+      <HeaderContent />
+    </Suspense>
   );
 }
